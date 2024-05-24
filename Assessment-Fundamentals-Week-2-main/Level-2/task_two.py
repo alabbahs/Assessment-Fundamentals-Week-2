@@ -54,7 +54,10 @@ class Trainee:
 
     def add_assessment(self, assessment: Assessment) -> None:
         """add_assessment method adds an assessment to the list of assessments the trainee has"""
-        self.assessments.append(assessment)
+        if not issubclass(type(assessment), Assessment):
+            raise TypeError()
+        else:
+            self.assessments.append(assessment)
 
     def get_assessment(self, name: str) -> Assessment | None:
         """
