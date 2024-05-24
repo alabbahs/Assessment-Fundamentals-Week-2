@@ -1,10 +1,4 @@
-from datetime import date
-
-#####
-#
-# COPY YOUR CODE FROM LEVEL 2 BELOW
-#
-#####
+"""task_three"""
 
 from datetime import date
 
@@ -14,8 +8,14 @@ from datetime import date
 #
 #####
 
-
 class Assessment:
+    """
+    Assessment class: an abstraction of an assessment, with attributes such as...
+    Name of the assessment
+    Type of the assessment
+    Score achieved on assessment
+    """
+
     def __init__(self, name: str, type: str, score: float):
         self.name = name
         self.type = type
@@ -23,12 +23,19 @@ class Assessment:
 
         if type not in ["multiple-choice", "technical", "presentation"]:
             raise ValueError("Error! Invalid assessment type")
-
-        if not (0 <= score <= 100):
+        if not 0 <= score <= 100:
             raise ValueError("Error! Assessment score is out of range 0-100")
 
 
 class Trainee:
+    """
+    Trainee class: an abstraction of a trainee who takes the assessments with attributes...
+    Trainee name
+    Trainee email
+    Trainee date of birth
+    Trainee assessments - list of assessments to be taken by trainee
+    """
+
     def __init__(self, name: str, email: str, date_of_birth: date) -> None:
         self.name = name
         self.email = email
@@ -36,30 +43,25 @@ class Trainee:
         self.assessments: list[Assessment] = []
 
     def get_age(self) -> int:
+        """get_age method returns the age of our trainee from their date of birth"""
         delta_time = date.today() - self.date_of_birth
         days = delta_time.days
         age = int(days//365.25)
         return age
 
     def add_assessment(self, assessment: Assessment) -> None:
-        if not isinstance(assessment, Assessment):
-            raise TypeError(
-                "Error! Tried to add non-assessment object to list")
+        """add_assessment method adds an assessment to the list of assessments the trainee has"""
         self.assessments.append(assessment)
 
     def get_assessment(self, name: str) -> Assessment | None:
+        """
+        given a name, the method get_assessment finds the assessment with that name, 
+        in the list of assessments the trainee has
+        """
         for assessment in self.assessments:
             if name == assessment.name:
                 return assessment
         return None
-
-    def get_assessment_of_type(self, type: str) -> list[Assessment]:
-        list_of_homogeneous_assessments = []
-        for assessment in self.assessments:
-            if assessment.type == type:
-                list_of_homogeneous_assessments.append(assessment)
-        return list_of_homogeneous_assessments
-
 
 #####
 #
@@ -67,29 +69,52 @@ class Trainee:
 #
 #####
 
+#####
+#
+# COPY YOUR CODE FROM LEVEL 1 BELOW
+#
+#####
 
 class MultipleChoiceAssessment(Assessment):
+    """
+    MultipleChoiceAssessment is a child class of Assessment class,
+    it is one of the three types of assessments
+    """
+
     def __init__(self, name, score) -> None:
         super().__init__(name, "multiple-choice", score)
 
     def calculate_score(self):
+        """returns score of assessment, technical assessments are weighted 70%"""
         score = self.score*0.7
         return score
 
 
 class TechnicalAssessment(Assessment):
+    """
+    TechnicalAssessment is a child class of Assessment class,
+    it is one of the three types of assessments
+    """
+
     def __init__(self, name, score) -> None:
         super().__init__(name, "technical", score)
 
     def calculate_score(self):
+        """returns score of assessment, technical assessments are weighted 100%"""
         return self.score
 
 
 class PresentationAssessment(Assessment):
+    """
+    PresentationAssessment is a child class of Assessment class,
+    it is one of the three types of assessments
+    """
+
     def __init__(self, name, score) -> None:
         super().__init__(name, "presentation", score)
 
     def calculate_score(self):
+        """returns score of assessment, technical assessments are weighted 60%"""
         score = self.score*0.6
         return score
 
@@ -99,8 +124,11 @@ class PresentationAssessment(Assessment):
 #
 #####
 
-
 class Question:
+    """
+    Question class carries the question, answer given by the trainee, 
+    and the correct answer.
+    """
 
     def __init__(self, question: str, chosen_answer: str, correct_answer: str):
         self.question = question
@@ -109,7 +137,11 @@ class Question:
 
 
 class Quiz:
-
+    """
+    Quiz class contains quiz name,
+    type of quiz from multiple choice, technical and presentation,
+    lastly a list of questions of type Question
+    """
     def __init__(self, questions: list, name: str, type: str):
         self.questions = questions
         self.name = name
@@ -117,6 +149,10 @@ class Quiz:
 
 
 class Marking:
+    """
+    Marking class contains the quiz to be marked and assesses the
+    answers of the trainee compared to the correct answers.
+    """
 
     def __init__(self, quiz: Quiz) -> None:
         self._quiz = quiz
@@ -125,12 +161,15 @@ class Marking:
     @property
     def quiz(self):
         return self._quiz
-    
     @quiz.setter
     def quiz(self, quiz):
         self.quiz = quiz
 
     def mark(self) -> int:
+        """
+        score is calculated as a percentage of...
+        number of correct answers / length of question list
+        """
         if len(self.quiz.questions) == 0:
             return 0
         num_of_correct_answers = 0
@@ -142,8 +181,11 @@ class Marking:
         num_of_questions = len(self.quiz.questions)
         total_score = int((num_of_correct_answers / num_of_questions) * 100)
         return total_score
-    
     def generate_assessment(self) -> Assessment:
+        """
+        creates a species of assessment object based on type of quiz,
+        accessed via Quiz class
+        """
         if self.quiz.type == "multiple-choice":
             assessment = MultipleChoiceAssessment(self.quiz.name, self.mark())
         elif self.quiz.type == "technical":
