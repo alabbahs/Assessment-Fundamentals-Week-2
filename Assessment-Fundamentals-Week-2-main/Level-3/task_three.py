@@ -137,14 +137,20 @@ class Marking:
         for question in self.quiz.questions:
             if question.chosen_answer == question.correct_answer:
                 num_of_correct_answers += 1
-                print("correct")
-                print(num_of_correct_answers)
             else:
-                print("wrong")
                 continue
         num_of_questions = len(self.quiz.questions)
         total_score = int((num_of_correct_answers / num_of_questions) * 100)
         return total_score
+    
+    def generate_assessment(self) -> Assessment:
+        if self.quiz.type == "multiple-choice":
+            assessment = MultipleChoiceAssessment(self.quiz.name, self.mark())
+        elif self.quiz.type == "technical":
+            assessment = TechnicalAssessment(self.quiz.name, self.mark())
+        elif self.quiz.type == "presentation":
+            assessment = PresentationAssessment(self.quiz.name, self.mark())
+        return assessment
 
 
 if __name__ == "__main__":
