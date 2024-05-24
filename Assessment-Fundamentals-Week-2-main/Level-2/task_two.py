@@ -47,7 +47,7 @@ class Trainee:
         list_of_homogeneous_assessments = []
         for assessment in self.assessments:
             if assessment.type == type:
-                list_of_homogeneous_assessments.append()
+                list_of_homogeneous_assessments.append(assessment)
         return list_of_homogeneous_assessments
 
 
