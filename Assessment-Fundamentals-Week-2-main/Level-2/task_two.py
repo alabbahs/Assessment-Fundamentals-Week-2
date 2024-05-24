@@ -69,18 +69,18 @@ class MultipleChoiceAssessment(Assessment):
 
 
 class TechnicalAssessment(Assessment):
-    def __init__(self, name, type, score) -> None:
-        super().__init__(self, name, type, score)
+    def __init__(self, name, score) -> None:
+        super().__init__(name, "technical", score)
 
     def calculate_score(self):
         return self.score
 
 class PresentationAssessment(Assessment):
-    def __init__(self, name, type, score) -> None:
-        super().__init__(self, name, type, score)
+    def __init__(self, name, score) -> None:
+        super().__init__(name, "presentation", score)
 
     def calculate_score(self):
-        score = int(self.score*0.6)
+        score = self.score*0.6
         return score
 
 
